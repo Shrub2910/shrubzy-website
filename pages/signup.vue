@@ -14,15 +14,24 @@
         })
         .catch(() => alert('Bad Credentials'))
     }
+
+    async function login() {
+        await navigateTo('/login')
+    }
 </script>
 
 <template>
     <div class="h-screen flex justify-center items-center">
         <form class="flex flex-col p-2 shadow-2xl rounde-md bg-orange-100" @submit.prevent="signup">
-            <h1 class="text-center text-2xl mb-4">Sign Up</h1>
-            <input v-model="credentials.email" class="border py-2 mb-2 rounded-full" type="email">
-            <input v-model="credentials.password" class="border py-2 mb-4 rounded-full" type="password">
-            <button class="p-4 rounded-full bg-blue-400 hover:text-white" type="submit">Submit</button>
+                        <h1 class="text-center text-2xl mb-4">Sign Up</h1>
+            <p>Email Address</p>
+            <input v-model="credentials.email" class="border px-2 py-2 mb-2 rounded-full" type="email">
+            <p>Password</p>
+            <input v-model="credentials.password" class="border px-2 py-2 mb-4 rounded-full" type="password">
+            <div class="flex justify-between">
+                <button class="mx-2 p-4 rounded-full bg-blue-400 hover:text-white" type="submit">Submit</button>
+                <button class="mx-2 p-4 rounded-full bg-green-400 hover:text-white" type="button" @click="login" >Log In</button>
+            </div>
         </form>
     </div>
 </template>

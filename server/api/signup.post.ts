@@ -12,9 +12,11 @@ export default defineEventHandler(async (event) => {
     const {email, password} = await readValidatedBody(event, bodySchema.parse)
     const db = useDrizzle()
 
+    const hashedPassword = await hashPassword(password)
+
     const user: typeof usersTable.$inferInsert = {
         email: email,
-        password: password,
+        password: hashedPassword,
     }
 
     await db.insert(usersTable).values(user)

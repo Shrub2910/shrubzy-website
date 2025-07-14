@@ -12,9 +12,18 @@ export default defineEventHandler(async (event) => {
     const {email, password} = await readValidatedBody(event, bodySchema.parse)
     const db = useDrizzle()
 
-    const [user] = await db.select().from(usersTable).where(sql`${usersTable.email} = ${email} and ${usersTable.password} = ${password}`).limit(1)
+    const [user] = await db.select().from(usersTable).where(sql`${usersTable.email} = ${email}`).limit(1)
 
     if (!user) {
+        throw createError({
+            statusCode: 401,
+            statusMessage: "Bad credentials",
+        })
+    }
+
+    const passwordIsValid = await verifyPassword(user.password, password)
+
+    if (!passwordIsValid) {
         throw createError({
             statusCode: 401,
             statusMessage: "Bad credentials",
