@@ -3,7 +3,7 @@ import { useDrizzle } from '#imports'
 import { postsTable } from '~/server/database/schema'
 
 const bodySchema = z.object({
-    title: z.string().max(120),
+    title: z.string().min(1).max(120),
     body: z.string()
 })
 

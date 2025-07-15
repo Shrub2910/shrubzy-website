@@ -19,7 +19,7 @@ export default defineEventHandler(async (event) => {
         posts = await db.select({
             title: postsTable.title,
             body: postsTable.body,
-            authorEmail: usersTable.email
+            authorUsername: usersTable.username
         }).from(postsTable)
         .leftJoin(usersTable, eq(postsTable.authorId, usersTable.id))
         .where(gt(postsTable.id, afterId)).limit(limit)
@@ -27,11 +27,12 @@ export default defineEventHandler(async (event) => {
         posts =  await db.select({
             title: postsTable.title,
             body: postsTable.body,
-            authorEmail: usersTable.email
+            authorUsername: usersTable.username
         }).from(postsTable)
         .leftJoin(usersTable, eq(postsTable.authorId, usersTable.id))
         .limit(limit)
     }
+
 
     return posts
 

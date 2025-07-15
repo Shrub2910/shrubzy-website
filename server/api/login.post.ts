@@ -20,8 +20,9 @@ export default defineEventHandler(async (event) => {
             statusMessage: "Bad credentials",
         })
     }
-
     const passwordIsValid = await verifyPassword(user.password, password)
+    console.log(passwordIsValid)
+
 
     if (!passwordIsValid) {
         throw createError({
@@ -30,11 +31,14 @@ export default defineEventHandler(async (event) => {
         })
     }
 
+    console.log(user.username)
+
     await setUserSession(event, 
         {
             user: {
                 id: user.id,
                 email: user.email,
+                username: user.username,
             }
         }
     )

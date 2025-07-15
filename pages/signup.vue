@@ -29,8 +29,8 @@
             <p>Password</p>
             <input v-model="credentials.password" class="border px-2 py-2 mb-4 rounded-full" type="password">
             <div class="flex justify-between">
-                <button class="mx-2 p-4 rounded-full bg-blue-400 hover:text-white" type="submit">Submit</button>
                 <button class="mx-2 p-4 rounded-full bg-green-400 hover:text-white" type="button" @click="login" >Log In</button>
+                <button class="mx-2 p-4 rounded-full bg-blue-400 hover:text-white" type="submit">Submit</button>
             </div>
         </form>
     </div>

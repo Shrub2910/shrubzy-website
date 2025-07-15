@@ -17,7 +17,10 @@
             await refreshSession()
             await navigateTo('/')
         })
-        .catch(() => showErrorMessage.value = true)
+        .catch((err) => {
+            console.log('There was an error: ', err)
+            showErrorMessage.value = true
+        })
     }
 
     async function signup() {
@@ -35,8 +38,8 @@
             <input v-model="credentials.password" class="border px-2 py-2 mb-4 w-72 rounded-full" type="password">
             <p v-if="showErrorMessage" class="text-red-500">Either username or password is incorrect</p>
             <div class="flex justify-between">
-                <button class="mx-2 p-4 rounded-full bg-blue-400 hover:text-white" type="submit">Submit</button>
                 <button class="mx-2 p-4 rounded-full bg-green-400 hover:text-white" type="button" @click="signup">Sign Up</button>
+                <button class="mx-2 p-4 rounded-full bg-blue-400 hover:text-white" type="submit">Submit</button>
             </div>
 
         </form>

@@ -3,9 +3,10 @@ import { relations } from "drizzle-orm";
 
 export const usersTable = pgTable("users",
     {
-        id: integer().primaryKey().generatedAlwaysAsIdentity(),
-        email: varchar({length: 320}).notNull().unique(),
-        password: varchar({length: 255}).notNull()
+        id: integer('id').primaryKey().generatedAlwaysAsIdentity(),
+        email: varchar('email', {length: 320}).notNull().unique(),
+        password: varchar('password', {length: 255}).notNull(),
+        username: varchar('username', {length: 320}).unique(),
     }
 )
 
@@ -15,10 +16,10 @@ export const userRelations = relations(usersTable, ({many}) => ({
 
 export const postsTable = pgTable("posts",
     {
-        id: integer().primaryKey().generatedAlwaysAsIdentity(),
-        title: varchar({length: 120}).notNull(),
-        body: text(),
-        authorId: integer()
+        id: integer('id').primaryKey().generatedAlwaysAsIdentity(),
+        title: varchar('title', {length: 120}).notNull(),
+        body: text('body'),
+        authorId: integer('author_id')
     }
 )
 

@@ -1,21 +1,21 @@
 <script setup lang="ts">
-    const props = defineProps<{
+    defineProps<{
         title?: string,
         body?: string,
-        email?: string,
+        username?: string,
     }>()
 </script>
 
 <template>
-    <div class="flex p-2 mx-4 bg-blue-200 rounded-md">
-        <div class="flex flex-col p-2 border-r border-black mr-2 mt-1">
+    <div class="flex items-start p-2 mx-4 bg-blue-200 rounded-md">
+        <div class="flex flex-col p-2 border-r h-full border-black mr-2 mt-1">
             <div class="w-8 h-8 rounded-full bg-blue-400" />
         </div>
         <div class="flex flex-col justify-center flex-grow mr-1">
-            <div class="w-full">
-                <p class="text-gray-500 mt-1 mb-2">Written by {{ props.email }}</p>
-                <h1 class="text-2xl pb-4 break-all mb-2">{{ props.title }}</h1>
-                <p class="break-all p-2 rounded-md bg-blue-300">{{ props.body }}</p>
+            <div class="flex flex-col w-full">
+                <p class="text-gray-500 mb-2 break-all">Written by {{ username }}</p>
+                <h1 class="text-2xl pb-4 break-words mb-2">{{ title }}</h1>
+                <p class="break-words p-2 max-h-40 overflow-auto rounded-md bg-blue-300 whitespace-pre-wrap">{{ body }}</p>
             </div>
 
         </div>
