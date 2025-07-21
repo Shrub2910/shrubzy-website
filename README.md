@@ -1,75 +1,16 @@
-# Nuxt Minimal Starter
+# Shrubzy website
 
-Look at the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+## Social media platform
+The website will be a social media platform allowing the user to make posts, comment on other people's posts,
+like and dislike posts, follow other users.
 
-## Setup
+## What has been completed so far
+- Users <br>
+- Posts <br>
+- Individual pages for posts <br>
 
-Make sure to install dependencies:
-
-```bash
-# npm
-npm install
-
-# pnpm
-pnpm install
-
-# yarn
-yarn install
-
-# bun
-bun install
-```
-
-## Development Server
-
-Start the development server on `http://localhost:3000`:
-
-```bash
-# npm
-npm run dev
-
-# pnpm
-pnpm dev
-
-# yarn
-yarn dev
-
-# bun
-bun run dev
-```
-
-## Production
-
-Build the application for production:
-
-```bash
-# npm
-npm run build
-
-# pnpm
-pnpm build
-
-# yarn
-yarn build
-
-# bun
-bun run build
-```
-
-Locally preview production build:
-
-```bash
-# npm
-npm run preview
-
-# pnpm
-pnpm preview
-
-# yarn
-yarn preview
-
-# bun
-bun run preview
-```
-
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+## What I'm working on
+- Making the website look pretty (I'm not good at art) <br>
+- Allowing the editing and deletion of posts <br>
+- User customisation <br>
+- Either a direct message feature or the ability to tag other people in posts <b>(or both)</b>
