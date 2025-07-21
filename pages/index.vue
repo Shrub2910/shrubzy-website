@@ -1,13 +1,9 @@
 <script setup lang="ts">
+    import type { Post } from '~/types/post'
+
     definePageMeta({
         middleware: ["auth"]
     })
-
-    interface Post {
-        title: string,
-        body: string,
-        authorUsername: string,
-    }
 
     const {user, clear: clearSession} = useUserSession()
 
@@ -45,7 +41,7 @@
 
         <p v-if="user" class="mb-4 text-center text-2xl">Welcome {{ user.username }}</p>
         <div class="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-            <UserPost v-for="(post, index) in posts" :key="index" :title="post.title" :body="post.body" :username="post.authorUsername"/>
+            <UserPost v-for="(post) in posts" :key="post.id" :post-id="post.id.toString()" :title="post.title" :body="post.body" :username="post.authorUsername"/>
         </div>
     </div>
 </template>

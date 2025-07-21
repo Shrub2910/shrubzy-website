@@ -1,5 +1,6 @@
 <script setup lang="ts">
     defineProps<{
+        postId: string,
         title?: string,
         body?: string,
         username?: string,
@@ -14,7 +15,7 @@
         <div class="flex flex-col justify-center flex-grow mr-1">
             <div class="flex flex-col w-full">
                 <p class="text-gray-500 mb-2 break-all">Written by {{ username }}</p>
-                <h1 class="text-2xl pb-4 break-words mb-2">{{ title }}</h1>
+                <NuxtLink :to="`/posts/${postId}`" class="text-2xl pb-4 break-words mb-2">{{ title }}</NuxtLink>
                 <p class="break-words p-2 max-h-40 overflow-auto rounded-md bg-blue-300 whitespace-pre-wrap">{{ body }}</p>
             </div>
 

@@ -17,6 +17,7 @@ export default defineEventHandler(async (event) => {
 
     if (afterId) {
         posts = await db.select({
+            id: postsTable.id,
             title: postsTable.title,
             body: postsTable.body,
             authorUsername: usersTable.username
@@ -25,6 +26,7 @@ export default defineEventHandler(async (event) => {
         .where(gt(postsTable.id, afterId)).limit(limit)
     } else {
         posts =  await db.select({
+            id: postsTable.id,
             title: postsTable.title,
             body: postsTable.body,
             authorUsername: usersTable.username
