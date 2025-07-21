@@ -1,4 +1,6 @@
 <script setup lang="ts">
+    import BaseButton from '~/components/BaseButton.vue'
+
     const {fetch: refreshSession} = useUserSession()
 
     const credentials = reactive({
@@ -38,8 +40,8 @@
             <input v-model="credentials.password" class="border px-2 py-2 mb-4 w-72 rounded-full" type="password">
             <p v-if="showErrorMessage" class="text-red-500">Either username or password is incorrect</p>
             <div class="flex justify-between">
-                <button class="mx-2 p-4 rounded-full bg-green-400 hover:text-white" type="button" @click="signup">Sign Up</button>
-                <button class="mx-2 p-4 rounded-full bg-blue-400 hover:text-white" type="submit">Submit</button>
+                <BaseButton type="button" variant="primary" @click="signup">Sign up</BaseButton>
+                <BaseButton type="submit" variant="secondary">Submit</BaseButton>
             </div>
 
         </form>
