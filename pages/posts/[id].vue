@@ -34,10 +34,14 @@
         })
     }
 
+    console.log(post.value)
+    const {user} = useUserSession()
+
+
 </script>
 
 <template>
     <main>
-        <UserPost v-if="post" :post-id="id" :title="post?.title" :body="post?.body" :username="post?.authorUsername" />
+        <UserPost :user-owns-post="user.id === post?.authorId" :post-id="id" :title="post?.title" :body="post?.body" :username="post?.authorUsername" />
     </main>
 </template>

@@ -4,7 +4,7 @@
 
 @layer base {
   html, body {
-    @apply bg-gray-700;
+    @apply bg-gray-900;
     height: 100%;
     margin: 0;
   }

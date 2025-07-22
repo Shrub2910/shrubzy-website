@@ -24,15 +24,15 @@
 
 <template>
     <div class="h-screen flex justify-center items-center">
-        <form class="flex flex-col p-2 shadow-2xl rounde-md bg-orange-100" @submit.prevent="signup">
-                        <h1 class="text-center text-2xl mb-4">Sign Up</h1>
-            <p>Email Address</p>
+        <form class="flex flex-col p-2 shadow-2xl rounde-md bg-gray-700" @submit.prevent="signup">
+                        <h1 class="text-center text-white text-2xl mb-4">Sign Up</h1>
+            <p class="text-white">Email Address</p>
             <input v-model="credentials.email" class="border px-2 py-2 mb-2 rounded-full" type="email">
-            <p>Password</p>
+            <p class="text-white">Password</p>
             <input v-model="credentials.password" class="border px-2 py-2 mb-4 rounded-full" type="password">
             <div class="flex justify-between">
-                <BaseButton type="button" variant="primary" @click="login">Log In</BaseButton>
-                <BaseButton type="submit" variant="secondary">Submit</BaseButton>
+                <BaseButton type="button" variant="secondary" @click="login">Log In</BaseButton>
+                <BaseButton type="submit" variant="primary">Submit</BaseButton>
             </div>
         </form>
     </div>

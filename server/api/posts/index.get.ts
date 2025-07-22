@@ -29,6 +29,7 @@ export default defineEventHandler(async (event) => {
             id: postsTable.id,
             title: postsTable.title,
             body: postsTable.body,
+            authorId: postsTable.authorId,
             authorUsername: usersTable.username
         }).from(postsTable)
         .leftJoin(usersTable, eq(postsTable.authorId, usersTable.id))
