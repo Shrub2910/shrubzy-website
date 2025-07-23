@@ -1,5 +1,5 @@
 <script setup lang="ts">
-    import type { Post } from '~/types/post'
+    import { usePostsStore } from '~/stores/posts'
 
     definePageMeta({
         middleware: ["auth"]
@@ -12,20 +12,11 @@
         await navigateTo('/login')
     }
 
-    const event = useRequestEvent()
+    const postsStore = usePostsStore()
 
-    const {data: posts} = await useAsyncData<Post[]>(
-        'posts',
-        () => $fetch<Post[]>('/api/posts', {
-            method: 'GET',
-            query: {
-                limit: 20
-            },
-            headers: {
-                cookie: event?.node.req.headers.cookie || ''
-            }
-        }) 
-    )
+    await callOnce('posts', () => postsStore.fetchPosts())
+
+    const posts = computed(() => postsStore.posts)
 
 </script>
 
