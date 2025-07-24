@@ -7,7 +7,7 @@ export const usePostsStore = defineStore('posts', {
 
     actions: {
         async createPost(postBody: {title: string, body: string}) {
-            const newPost: Post = await $fetch('/api/posts', {
+            const newPost: Post = await $fetch<Post>('/api/posts', {
                 method: 'POST',
                 body: postBody
             })

@@ -21,8 +21,6 @@ export default defineEventHandler(async (event) => {
 
     const [{id}] = await db.insert(postsTable).values(post).returning()
 
-    console.log(id)
-
     const [newPost] = await db.select({
             id: postsTable.id,
             title: postsTable.title,
@@ -31,7 +29,5 @@ export default defineEventHandler(async (event) => {
             authorUsername: usersTable.username
     }).from(postsTable).leftJoin(usersTable, eq(postsTable.authorId, usersTable.id)).where(eq(postsTable.id, id)).limit(1)
     
-    console.log(newPost)
-
     return newPost
 })

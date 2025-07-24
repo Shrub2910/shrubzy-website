@@ -14,7 +14,7 @@
 
     const postsStore = usePostsStore()
 
-    await callOnce('posts', () => postsStore.fetchPosts())
+    await callOnce('posts', () => postsStore.fetchPosts(), {mode: 'navigation'})
 
     const posts = computed(() => postsStore.posts)
 
@@ -31,8 +31,10 @@
         </div>
 
         <p v-if="user" class="mb-4 text-center font-semibold text-white text-2xl">Welcome {{ user.username }}</p>
-        <div class="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-            <UserPost v-for="(post) in posts" :key="post.id" :user-owns-post="user.id === post.authorId" :post-id="post.id.toString()" :title="post.title" :body="post.body" :username="post.authorUsername"/>
+        <div class="flex justify-center">
+            <div class="flex flex-col gap-4 w-full max-w-7xl">
+                <UserPost v-for="(post) in posts" :key="post.id" :user-owns-post="user.id === post.authorId" :post-id="post.id.toString()" :title="post.title" :body="post.body" :username="post.authorUsername"/>
+            </div>
         </div>
     </div>
 </template>

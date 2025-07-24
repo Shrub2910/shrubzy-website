@@ -1,5 +1,6 @@
 <script setup lang="ts">
     import UserPost from '~/components/UserPost.vue';
+    import type { Post } from '~/types/post';
 
     definePageMeta({
         middleware: ['auth']
@@ -14,7 +15,7 @@
 
     await callOnce(`post/${id}`, () => postsStore.fetchPost(id), {mode: 'navigation'})
 
-    const post = postsStore.currentPost
+    const post: Post | undefined = postsStore.currentPost
 
     const {user} = useUserSession()
 
@@ -23,6 +24,6 @@
 
 <template>
     <main>
-        <UserPost :user-owns-post="user.id === post?.authorId" :post-id="id" :title="post?.title" :body="post?.body" :username="post?.authorUsername" />
+        <UserPost v-if="post" :user-owns-post="user.id === post?.authorId" :post-id="id" :title="post.title" :body="post.body" :username="post.authorUsername" delete-redirect="/" />
     </main>
 </template>
