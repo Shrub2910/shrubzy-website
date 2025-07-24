@@ -6,6 +6,16 @@ export const usePostsStore = defineStore('posts', {
     state: (): {posts: Post[], currentPost: Post | undefined} => ({posts: [], currentPost: undefined}),
 
     actions: {
+        async createPost(postBody: {title: string, body: string}) {
+            const newPost: Post = await $fetch('/api/posts', {
+                method: 'POST',
+                body: postBody
+            })
+
+
+            this.posts.push(newPost)
+        },
+
         async fetchPosts(){
             const headers = import.meta.server ? useRequestHeaders(['cookie']) : undefined
 

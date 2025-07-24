@@ -2,9 +2,9 @@
     const props = defineProps<{
         userOwnsPost: boolean,
         postId: string,
-        title?: string,
-        body?: string,
-        username?: string,
+        title: string,
+        body: string | null,
+        username: string | null,
     }>()
 
     const postsStore = usePostsStore()

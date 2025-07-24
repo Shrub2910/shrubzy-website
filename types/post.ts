@@ -1,7 +1,7 @@
 export interface Post {
     id: number,
     title: string,
-    body: string,
-    authorId: number,
-    authorUsername: string,
+    body: string | null,
+    authorId: number | null,
+    authorUsername: string | null,
 }

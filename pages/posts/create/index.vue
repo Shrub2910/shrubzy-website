@@ -3,20 +3,21 @@
         middleware: ['auth']
     })
 
+    const postStore = usePostsStore()
+
     const postBody = reactive({
         title: '',
         body: '',
     })
 
     async function submitPost() {
-        $fetch('/api/posts', {
-            method: 'POST',
-            body: postBody
-        })
-        .then(async () => {
-            await navigateTo('/')
-        })
-        .catch(() => alert('Bad Post'))
+        try {
+            await postStore.createPost(postBody)
+            console.log('made it this far')
+            navigateTo('/')
+        } catch {
+            alert('Bad post')
+        } 
     }
 </script>
 

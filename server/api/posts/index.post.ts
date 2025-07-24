@@ -1,6 +1,7 @@
 import {z} from 'zod'
 import { useDrizzle } from "~/server/utils/drizzle"
-import { postsTable } from '~/server/database/schema'
+import { postsTable, usersTable } from '~/server/database/schema'
+import { eq } from 'drizzle-orm'
 
 const bodySchema = z.object({
     title: z.string().min(1).max(120),
@@ -18,7 +19,19 @@ export default defineEventHandler(async (event) => {
         authorId: user.id
     }
 
-    await db.insert(postsTable).values(post)
+    const [{id}] = await db.insert(postsTable).values(post).returning()
 
-    return {}
+    console.log(id)
+
+    const [newPost] = await db.select({
+            id: postsTable.id,
+            title: postsTable.title,
+            body: postsTable.body,
+            authorId: postsTable.authorId,
+            authorUsername: usersTable.username
+    }).from(postsTable).leftJoin(usersTable, eq(postsTable.authorId, usersTable.id)).where(eq(postsTable.id, id)).limit(1)
+    
+    console.log(newPost)
+
+    return newPost
 })
