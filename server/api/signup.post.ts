@@ -1,5 +1,5 @@
 import {z} from 'zod'
-import { useDrizzle } from '#imports'
+import { useDrizzle } from "~/server/utils/drizzle"
 import { usersTable } from '../database/schema'
 
 

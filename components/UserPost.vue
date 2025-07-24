@@ -1,11 +1,17 @@
 <script setup lang="ts">
-    defineProps<{
+    const props = defineProps<{
         userOwnsPost: boolean,
         postId: string,
         title?: string,
         body?: string,
         username?: string,
     }>()
+
+    const postsStore = usePostsStore()
+
+    async function deletePost() {
+        await postsStore.deletePost(props.postId)
+    }
 </script>
 
 <template>
@@ -22,7 +28,7 @@
 
             <div v-if="userOwnsPost" class="flex justify-end gap-2">
                 <BaseButton variant="warning">Edit</BaseButton>
-                <BaseButton variant="danger">Delete</BaseButton>
+                <BaseButton variant="danger" @click="deletePost">Delete</BaseButton>
             </div>
 
         </div>

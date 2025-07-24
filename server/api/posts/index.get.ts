@@ -1,5 +1,5 @@
 import {z} from 'zod'
-import { useDrizzle } from '#imports'
+import { useDrizzle } from "~/server/utils/drizzle"
 import { postsTable, usersTable } from '~/server/database/schema'
 import { eq, gt } from 'drizzle-orm'
 

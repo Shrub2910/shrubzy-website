@@ -1,5 +1,5 @@
 import {z} from 'zod'
-import { useDrizzle } from '#imports'
+import { useDrizzle } from "~/server/utils/drizzle"
 import { usersTable } from '../database/schema'
 import { sql } from 'drizzle-orm'
 
@@ -21,8 +21,6 @@ export default defineEventHandler(async (event) => {
         })
     }
     const passwordIsValid = await verifyPassword(user.password, password)
-    console.log(passwordIsValid)
-
 
     if (!passwordIsValid) {
         throw createError({

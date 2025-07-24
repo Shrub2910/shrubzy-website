@@ -1,9 +1,9 @@
-import { postsTable, usersTable } from "~/server/database/schema"
+import { postsTable } from "~/server/database/schema"
 import { useDrizzle } from "~/server/utils/drizzle"
 import { eq } from "drizzle-orm"
 
-export default defineEventHandler( async (event) => {
-    await requireUserSession(event)
+export default defineEventHandler(async (event) => {
+    const {user} = await requireUserSession(event)
 
     const db = useDrizzle()
 
@@ -19,12 +19,8 @@ export default defineEventHandler( async (event) => {
     const id = parseInt(idParam)
 
     const [post] = await db.select({
-        id: postsTable.id,
-        title: postsTable.title,
-        body: postsTable.body,
         authorId: postsTable.authorId,
-        authorUsername: usersTable.username
-    }).from(postsTable).leftJoin(usersTable, eq(postsTable.authorId, usersTable.id)).where(eq(postsTable.id, id)).limit(1)
+    }).from(postsTable).where(eq(postsTable.id, id)).limit(1)
 
     if (!post) {
         throw createError({
@@ -33,7 +29,14 @@ export default defineEventHandler( async (event) => {
         })
     }
 
-    return post
+    if (post.authorId !== user.id) {
+        throw createError({
+            statusCode: 403,
+            statusMessage: 'Unauthorised to delete post'
+        })
+    }
 
+    await db.delete(postsTable).where(eq(postsTable.id, id))
 
+    return {}
 })
