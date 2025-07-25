@@ -29,8 +29,6 @@ export default defineEventHandler(async (event) => {
         })
     }
 
-    console.log(user.username)
-
     await setUserSession(event, 
         {
             user: {

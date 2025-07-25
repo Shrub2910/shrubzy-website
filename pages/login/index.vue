@@ -13,7 +13,7 @@
     async function login() {
         $fetch('/api/login', {
             method: 'POST',
-            body: credentials
+            body: credentials,
         })
         .then(async () => {
             await refreshSession()

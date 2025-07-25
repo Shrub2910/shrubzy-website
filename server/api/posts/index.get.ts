@@ -1,7 +1,7 @@
 import {z} from 'zod'
 import { useDrizzle } from "~/server/utils/drizzle"
 import { postsTable, usersTable } from '~/server/database/schema'
-import { eq, gt } from 'drizzle-orm'
+import { desc, eq, gt } from 'drizzle-orm'
 
 const querySchema = z.object({
     limit: z.coerce.number().int().min(1).max(100).optional().default(10),
@@ -23,7 +23,7 @@ export default defineEventHandler(async (event) => {
             authorUsername: usersTable.username
         }).from(postsTable)
         .leftJoin(usersTable, eq(postsTable.authorId, usersTable.id))
-        .where(gt(postsTable.id, afterId)).limit(limit)
+        .where(gt(postsTable.id, afterId)).limit(limit).orderBy(desc(postsTable.id))
     } else {
         posts =  await db.select({
             id: postsTable.id,
@@ -34,6 +34,7 @@ export default defineEventHandler(async (event) => {
         }).from(postsTable)
         .leftJoin(usersTable, eq(postsTable.authorId, usersTable.id))
         .limit(limit)
+        .orderBy(desc(postsTable.id))
     }
 
 
