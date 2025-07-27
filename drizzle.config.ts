@@ -6,11 +6,11 @@ export default defineConfig({
     schema: './server/database/schema.ts',
     dialect: 'postgresql',
     dbCredentials: {
-        host: process.env.POSTGRES_HOST!,
+        host: process.env.DATABASE_HOST!,
         port: 5432,
-        user: process.env.POSTGRES_USER!,
-        password: process.env.POSTGRES_PASSWORD!,
-        database: process.env.POSTGRES_DATABASE!,
+        user: process.env.DATABASE_USER!,
+        password: process.env.DATABASE_PASSWORD!,
+        database: process.env.DATABASE_DATABASE!,
         ssl: {ca: process.env.SUPABASE_CA_CERT!},
         
     },
