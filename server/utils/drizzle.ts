@@ -10,7 +10,7 @@ const pool = new Pool({
   database: process.env.DATABASE_DATABASE!,
   ssl: {
     rejectUnauthorized: true,
-    ca: process.env.SUPABASE_CA_CERT
+    ca: process.env.SUPABASE_CA_CERT?.replace(/\\n/g, '\n')
   },
 
 });
