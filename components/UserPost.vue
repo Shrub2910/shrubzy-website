@@ -17,8 +17,8 @@
     
     const editingMode = ref(false)
 
-    const editedTitle = ref(props.title)
-    const editedBody = ref(props.body ? props.body : '')
+    const editedTitle = ref('')
+    const editedBody = ref('')
 
     async function createPost() {
         try {
@@ -69,8 +69,8 @@
                 <p v-if="!editingMode && !createTemplate" class="text-gray-100 p-2 max-h-40 overflow-auto rounded-md break-words whitespace-pre-wrap">{{ body }}</p>
                 
 
-                <contenteditable v-if="editingMode || createTemplate" v-model="editedTitle" tag="div"  class="text-4xl text-blue-400 bg-transparent font-bold pb-4 mt-2 break-words" />
-                <contenteditable v-if="editingMode || createTemplate" v-model="editedBody" tag="div" class="text-blue-400 bg-transparent p-2 max-h-40 overflow-auto rounded-md break-words whitespace-pre-wrap" />
+                <contenteditable v-if="editingMode || createTemplate" v-model="editedTitle" tag="div" data-placeholder="Title..." class="text-4xl text-blue-400 bg-transparent font-bold pb-4 mt-2 break-words relative empty:before:content-[attr(data-placeholder)] empty:before:text-gray-400 empty:before:absolute empty:before:pointer-events-none" />
+                <contenteditable v-if="editingMode || createTemplate" v-model="editedBody" tag="div" data-placeholder="Body..." class="text-blue-400 bg-transparent p-2 max-h-40 overflow-auto rounded-md break-words whitespace-pre-wrap empty:before:content-[attr(data-placeholder)] empty:before:text-gray-400 empty:before:absolute empty:before:pointer-events-none" />
             </div>
 
             <div v-if="userOwnsPost" class="flex justify-end gap-2">
