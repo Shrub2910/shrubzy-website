@@ -10,6 +10,10 @@ const bodySchema = z.object({
 
 export default defineEventHandler(async (event) => {
     const {email, password} = await readValidatedBody(event, bodySchema.parse)
+    .catch(() => {throw createError({
+        statusCode: 400,
+        statusMessage: 'Invalid body'
+    })})
     const db = useDrizzle()
 
     const hashedPassword = await hashPassword(password)

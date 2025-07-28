@@ -8,10 +8,10 @@ const pool = new Pool({
   user: process.env.DATABASE_USER!,
   password: process.env.DATABASE_PASSWORD!,
   database: process.env.DATABASE_DATABASE!,
-  ssl: {
+  ssl: process.env.USE_SSL=== 'true' ? {
     rejectUnauthorized: true,
     ca: process.env.SUPABASE_CA_CERT?.replace(/\\n/g, '\n')
-  },
+  } : false,
 
 });
 
