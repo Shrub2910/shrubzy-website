@@ -58,6 +58,7 @@
                     :username="post.authorUsername"
                     :create-template="false"
                 />
+                <BaseButton class="mx-2 mb-2 text-2xl" @click="postsStore.fetchMorePosts">Show More</BaseButton>
             </div>
         </div>
     </div>

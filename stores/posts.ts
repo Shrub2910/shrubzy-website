@@ -32,6 +32,23 @@ export const usePostsStore = defineStore('posts', {
             this.currentPost = await requestFetch<Post>(`/api/posts/${id}`)
         },
 
+        async fetchMorePosts() {
+            const requestFetch = useRequestFetch()
+
+            if (this.posts.length === 0) {
+                return
+            }
+
+            const newPosts: Post[] = await requestFetch<Post[]>('/api/posts', {
+                query: {
+                    limit: 20,
+                    afterId: this.posts[this.posts.length - 1].id
+                }
+            })
+
+            this.posts = [...this.posts, ...newPosts]
+        },
+
         async editPost(id: string, postBody: {title: string, body: string}) {
             const requestFetch = useRequestFetch()
 
