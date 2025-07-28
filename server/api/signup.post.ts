@@ -21,7 +21,7 @@ export default defineEventHandler(async (event) => {
     const user: typeof usersTable.$inferInsert = {
         email: email,
         password: hashedPassword,
-        username: email,
+        username: email.substring(0, 20),
     }
 
     await db.insert(usersTable).values(user)
