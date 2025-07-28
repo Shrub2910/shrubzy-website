@@ -9,7 +9,12 @@ const bodySchema = z.object({
 
 export default defineEventHandler(async (event) => {
     const {user} = await requireUserSession(event)
-    const {username} = await readValidatedBody(event, bodySchema.parse)
+    const {username} = await readValidatedBody(event, bodySchema.parse).catch(() => {
+        throw createError({
+            statusCode: 400,
+            statusMessage: 'Username not valid: username must be a string and between 4 and 20 characters'
+        })
+    })
 
     const db = useDrizzle()
 

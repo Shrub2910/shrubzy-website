@@ -1,9 +1,9 @@
-import { postsTable, usersTable } from "~/server/database/schema"
+import { likesTable, postsTable, usersTable } from "~/server/database/schema"
 import { useDrizzle } from "~/server/utils/drizzle"
-import { eq } from "drizzle-orm"
+import { count, eq, sql } from "drizzle-orm"
 
 export default defineEventHandler( async (event) => {
-    await requireUserSession(event)
+    const {user} = await requireUserSession(event)
 
     const db = useDrizzle()
 
@@ -23,8 +23,16 @@ export default defineEventHandler( async (event) => {
         title: postsTable.title,
         body: postsTable.body,
         authorId: postsTable.authorId,
-        authorUsername: usersTable.username
-    }).from(postsTable).leftJoin(usersTable, eq(postsTable.authorId, usersTable.id)).where(eq(postsTable.id, id)).limit(1)
+        authorUsername: usersTable.username,
+        likeCount: count(likesTable.postId),
+        isLiked: sql<boolean>`bool_or(${likesTable.userId} = ${user.id})`.as('isLiked')
+    })
+    .from(postsTable)
+    .leftJoin(usersTable, eq(postsTable.authorId, usersTable.id))
+    .leftJoin(likesTable, eq(postsTable.id, likesTable.postId))
+    .where(eq(postsTable.id, id))
+    .groupBy(postsTable.id, postsTable.title, postsTable.body, postsTable.authorId, usersTable.username)
+    .limit(1)
 
     if (!post) {
         throw createError({

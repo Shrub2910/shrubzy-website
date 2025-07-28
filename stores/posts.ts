@@ -82,14 +82,20 @@ export const usePostsStore = defineStore('posts', {
 
         async likePost(id: string) {
             const idNumber = parseInt(id)
-            const post = this.posts.find(post => post.id === idNumber)
+            const allPosts = [...this.posts, this.currentPost]
+
+            const posts = allPosts.filter(post => post?.id === idNumber)
             
-            if (!post) {
+            if (!posts) {
                 return
             }
 
-            post.isLiked = !post.isLiked
-            post.likeCount += post.isLiked ? 1 : -1
+            posts.forEach((post) => {
+                if (post) {
+                    post.isLiked = !post.isLiked
+                    post.likeCount += post.isLiked ? 1 : -1
+                }
+            })
 
             await $fetch('/api/likes', {
                 method: 'PUT',
