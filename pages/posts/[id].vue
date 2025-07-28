@@ -31,6 +31,7 @@
             :title="post.title" 
             :body="post.body" 
             :username="post.authorUsername" 
+            :like-count="post.likeCount"
             delete-redirect="/" 
             :create-template="false"
         />

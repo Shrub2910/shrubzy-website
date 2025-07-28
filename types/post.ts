@@ -4,4 +4,6 @@ export interface Post {
     body: string | null,
     authorId: number | null,
     authorUsername: string | null,
+    likeCount: number,
+    isLiked: boolean
 }
