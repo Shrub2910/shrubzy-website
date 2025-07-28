@@ -7,7 +7,10 @@
         title: string,
         body: string | null,
         username: string | null,
-        likeCount?: number
+        likeCount?: number,
+
+        isLiked?: boolean,
+
         deleteRedirect?: string,
 
         createTemplate: boolean,
@@ -75,7 +78,7 @@
             </div>
 
             <div class="flex justify-between">
-                <BaseButton v-if="!editingMode && !createTemplate" @click="postsStore.likePost(postId)">Like: {{ likeCount }}</BaseButton>
+                <BaseButton v-if="!editingMode && !createTemplate" :class="!isLiked && 'bg-transparent'" @click="postsStore.likePost(postId)">Like: {{ likeCount }}</BaseButton>
                 <div v-if="userOwnsPost" class="flex justify-end gap-2">
                     <BaseButton v-if="!editingMode && !createTemplate" variant="warning" @click="editPost">Edit</BaseButton>
                     <BaseButton v-if="!editingMode && !createTemplate" variant="danger" @click="deletePost">Delete</BaseButton>

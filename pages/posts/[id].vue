@@ -32,6 +32,7 @@
             :body="post.body" 
             :username="post.authorUsername" 
             :like-count="post.likeCount"
+            :is-liked="post.isLiked"
             delete-redirect="/" 
             :create-template="false"
         />

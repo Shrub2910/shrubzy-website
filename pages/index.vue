@@ -57,6 +57,7 @@
                     :body="post.body" 
                     :username="post.authorUsername"
                     :like-count="post.likeCount"
+                    :is-liked="post.isLiked"
                     :create-template="false"
                 />
                 <BaseButton class="mx-2 mb-2 text-2xl" @click="postsStore.fetchMorePosts">Show More</BaseButton>
