@@ -8,9 +8,10 @@ like and dislike posts, follow other users.
 - Users <br>
 - Posts <br>
 - Individual pages for posts <br>
+- Allowed the editing and deletion of posts <br>
+- Like button<br>
+- Decent UI/UX but can be improved<br>
 
 ## What I'm working on
-- Making the website look pretty (I'm not good at art) <br>
-- Allowing the editing and deletion of posts <br>
 - User customisation <br>
 - Either a direct message feature or the ability to tag other people in posts <b>(or both)</b>
