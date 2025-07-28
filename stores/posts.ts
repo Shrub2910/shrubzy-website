@@ -14,8 +14,7 @@ export const usePostsStore = defineStore('posts', {
                 body: postBody
             })
 
-
-            this.posts.push(newPost)
+            this.posts = [newPost, ...this.posts]
         },
 
         async fetchPosts(){

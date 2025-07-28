@@ -24,6 +24,15 @@
 
 <template>
     <main>
-        <UserPost v-if="post" :user-owns-post="user.id === post?.authorId" :post-id="id" :title="post.title" :body="post.body" :username="post.authorUsername" delete-redirect="/" />
+        <UserPost 
+            v-if="post" 
+            :user-owns-post="user.id === post?.authorId" 
+            :post-id="id" 
+            :title="post.title" 
+            :body="post.body" 
+            :username="post.authorUsername" 
+            delete-redirect="/" 
+            :create-template="false"
+        />
     </main>
 </template>

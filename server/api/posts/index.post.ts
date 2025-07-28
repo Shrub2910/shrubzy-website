@@ -4,8 +4,8 @@ import { postsTable, usersTable } from '~/server/database/schema'
 import { eq } from 'drizzle-orm'
 
 const bodySchema = z.object({
-    title: z.string().min(1).max(120),
-    body: z.string()
+    title: z.string().trim().min(1).max(120),
+    body: z.string().trim()
 })
 
 export default defineEventHandler(async (event) => {
