@@ -76,7 +76,7 @@
 
             <div class="flex justify-between">
                 <BaseButton v-if="!editingMode && !createTemplate" @click="postsStore.likePost(postId)">Like: {{ likeCount }}</BaseButton>
-                <div v-if="userOwnsPost" class="justify-end gap-2">
+                <div v-if="userOwnsPost" class="flex justify-end gap-2">
                     <BaseButton v-if="!editingMode && !createTemplate" variant="warning" @click="editPost">Edit</BaseButton>
                     <BaseButton v-if="!editingMode && !createTemplate" variant="danger" @click="deletePost">Delete</BaseButton>
 

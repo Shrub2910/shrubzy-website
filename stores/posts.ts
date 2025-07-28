@@ -14,6 +14,9 @@ export const usePostsStore = defineStore('posts', {
                 body: postBody
             })
 
+            newPost.isLiked = false
+            newPost.likeCount = 0
+
             this.posts = [newPost, ...this.posts]
         },
 
@@ -85,12 +88,12 @@ export const usePostsStore = defineStore('posts', {
                 return
             }
 
+            post.isLiked = !post.isLiked
+            post.likeCount += post.isLiked ? 1 : -1
+
             await $fetch('/api/likes', {
                 method: 'PUT',
                 body: {postId: idNumber}
-            }).then(() => {
-                post.isLiked = !post.isLiked
-                post.likeCount += post.isLiked ? 1 : -1
             })
 
 
