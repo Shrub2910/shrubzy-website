@@ -8,13 +8,17 @@
         body: string | null,
         username: string | null,
         likeCount?: number,
+        replyCount?: number,
 
         isLiked?: boolean,
+        parentId?: number,
+        parentTitle?: string,
 
         deleteRedirect?: string,
 
         createTemplate: boolean,
         hidePost?: () => void,
+        replyPost?: (id: string, title: string) => void,
     }>()
 
     const postsStore = usePostsStore()
@@ -26,7 +30,7 @@
 
     async function createPost() {
         try {
-            await postsStore.createPost({title: editedTitle.value, body: editedBody.value})
+            await postsStore.createPost({title: editedTitle.value, body: editedBody.value, parentId: props.parentId})
             editedTitle.value = 'Title'
             editedBody.value = 'Body'
             if (props.hidePost){
@@ -67,8 +71,10 @@
     <div class="flex p-2 mx-2 bg-gray-700 rounded-md">
         <div class="flex flex-col justify-center mr-1 gap-2 w-full min-w-0 m-4">
             <div class="flex flex-col justify-between">
-                <p v-if="!createTemplate" class="text-gray-400 break-all">Written by {{ username }}</p>
-                
+                <div class="flex justify-between">
+                    <p v-if="!createTemplate" class="text-gray-400 break-all">Written by {{ username }}</p>
+                    <p v-if="parentId" class="text-gray-400 break-all">Replying to {{parentTitle}}</p>
+                </div>                
                 <NuxtLink v-if="!editingMode && !createTemplate" :to="`/posts/${postId}`" class="text-4xl text-gray-100 font-bold pb-4 mt-2 break-words">{{ title }}</NuxtLink>
                 <p v-if="!editingMode && !createTemplate" class="text-gray-100 p-2 max-h-40 overflow-auto rounded-md break-words whitespace-pre-wrap">{{ body }}</p>
                 
@@ -78,7 +84,10 @@
             </div>
 
             <div class="flex justify-between">
-                <BaseButton v-if="!editingMode && !createTemplate" :class="!isLiked && 'bg-transparent'" @click="postsStore.likePost(postId)">Like: {{ likeCount }}</BaseButton>
+                <div v-if="!editingMode && !createTemplate" class="flex justify-start gap-2">
+                    <BaseButton v-if="replyPost" variant="secondary" @click="replyPost(postId, title)">Reply: {{ replyCount }}</BaseButton>
+                    <BaseButton :class="!isLiked && 'bg-transparent'" @click="postsStore.likePost(postId)">Like: {{ likeCount }}</BaseButton>
+                </div>
                 <div v-if="userOwnsPost" class="flex justify-end gap-2">
                     <BaseButton v-if="!editingMode && !createTemplate" variant="warning" @click="editPost">Edit</BaseButton>
                     <BaseButton v-if="!editingMode && !createTemplate" variant="danger" @click="deletePost">Delete</BaseButton>

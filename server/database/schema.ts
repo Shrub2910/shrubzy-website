@@ -1,4 +1,4 @@
-import { pgTable, integer, varchar, text, primaryKey } from "drizzle-orm/pg-core";
+import { pgTable, integer, varchar, text, primaryKey, foreignKey } from "drizzle-orm/pg-core";
 import { relations } from "drizzle-orm";
 
 export const usersTable = pgTable("users",
@@ -20,8 +20,16 @@ export const postsTable = pgTable("posts",
         id: integer('id').primaryKey().generatedAlwaysAsIdentity(),
         title: varchar('title', {length: 120}).notNull(),
         body: text('body'),
-        authorId: integer('author_id')
-    }
+        authorId: integer('author_id'),
+        parentId: integer('parent_id')
+    },
+    (t) => [
+        foreignKey({
+            columns: [t.parentId],
+            foreignColumns: [t.id],
+        })
+        .onDelete('cascade')
+    ]
 )
 
 export const postRelations = relations(postsTable, ({one, many}) => ({
@@ -30,7 +38,14 @@ export const postRelations = relations(postsTable, ({one, many}) => ({
         references: [usersTable.id],
     }),
 
-    likes: many(likesTable)
+    likes: many(likesTable),
+
+    parent: one(postsTable, {
+        fields: [postsTable.parentId],
+        references: [postsTable.id]
+    }),
+
+    children: many(postsTable)
 }))
 
 export const likesTable = pgTable("likes",

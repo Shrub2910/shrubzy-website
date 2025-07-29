@@ -6,6 +6,10 @@
     })
 
     const showTemplate = ref(false)
+    const reply = reactive({
+        id: '',
+        title: ''
+    })
     const {user, clear: clearSession} = useUserSession()
 
     async function logout() {
@@ -15,6 +19,17 @@
 
     function toggleTemplate() {
         showTemplate.value = !showTemplate.value
+        if (!showTemplate.value) {
+            reply.id = ''
+            reply.title = ''
+        }
+    }
+
+    function replyPost(id: string, title: string) {
+        reply.id = id
+        reply.title = title
+
+        showTemplate.value = true
     }
 
     const postsStore = usePostsStore()
@@ -47,6 +62,8 @@
                     username=""
                     :create-template="true"
                     :hide-post="toggleTemplate"
+                    :parent-id="reply.id !== '' ? parseInt(reply.id): undefined"
+                    :parent-title="reply.title !== '' ? reply.title: undefined"
                 />
                 <UserPost 
                     v-for="(post) in posts" 
@@ -58,7 +75,11 @@
                     :username="post.authorUsername"
                     :like-count="post.likeCount"
                     :is-liked="post.isLiked"
+                    :reply-count="post.replyCount"
+                    :parent-id="post.parentId ? post.parentId : undefined"
+                    :parent-title="post.parentTitle ? post.parentTitle : undefined"
                     :create-template="false"
+                    :reply-post="replyPost"
                 />
                 <BaseButton class="mx-2 mb-2 text-2xl" @click="postsStore.fetchMorePosts">Show More</BaseButton>
             </div>
