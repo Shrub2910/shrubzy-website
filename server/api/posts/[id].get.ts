@@ -1,6 +1,6 @@
 import { likesTable, postsTable, usersTable } from "~/server/database/schema"
 import { useDrizzle } from "~/server/utils/drizzle"
-import { count, eq, sql } from "drizzle-orm"
+import { countDistinct, eq, sql } from "drizzle-orm"
 import { alias } from "drizzle-orm/pg-core"
 
 export default defineEventHandler( async (event) => {
@@ -29,8 +29,8 @@ export default defineEventHandler( async (event) => {
         authorUsername: usersTable.username,
         parentId: parent.id,
         parentTitle: parent.title,
-        replyCount: count(replies.id).as('replyCount'),
-        likeCount: count(likesTable.postId).as('likeCount'),
+        replyCount: countDistinct(replies.id).as('replyCount'),
+        likeCount: countDistinct(likesTable.postId).as('likeCount'),
         isLiked: sql<boolean>`bool_or(${likesTable.userId} = ${user.id})`.as('isLiked')
     })
     .from(postsTable)
