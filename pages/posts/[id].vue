@@ -9,11 +9,14 @@
     const route = useRoute()
     const id = route.params.id as string
 
-    const {user} = useUserSession()
+    const {user, clear: clearSession} = useUserSession()
 
     const postsStore = usePostsStore()
 
-    await callOnce(`post/${id}`, () => postsStore.fetchPost(id), {mode: 'navigation'})
+    await callOnce(`post/${id}`, () => {
+        postsStore.clearStore()
+        postsStore.fetchPost(id)
+    }, {mode: 'navigation'})
     await callOnce(`post/parent/${id}`, () => postsStore.fetchPosts(id), {mode: 'navigation'})
 
     const post = computed(() => postsStore.currentPost)
@@ -23,7 +26,12 @@
 
     const replyId = ref<number | null>(null)
     const replyTitle = ref('')
-    
+
+    async function logout() {
+        await clearSession()
+        await navigateTo('/login')
+    }
+
     function toggleTemplate() {
         showTemplate.value = !showTemplate.value
         if (!showTemplate.value) {
@@ -58,6 +66,13 @@
 
 <template>
     <main>
+    <div class="flex justify-between items-center h-12 mb-4">
+        <h1 class="text-center text-white ml-4 text-2xl"><NuxtLink to="/">Shrubzy</NuxtLink></h1>
+        <div class="flex gap-x-2">
+            <BaseButton @click="toggleTemplate">Create Post</BaseButton>
+            <BaseButton variant="secondary" @click="logout" >Log Out</BaseButton>
+        </div>
+    </div>
     <div class="flex justify-center">
         <div class="flex flex-col gap-4 w-full max-w-7xl">
             <UserPost 
@@ -81,7 +96,6 @@
                 :post="postReply"
                 :user="user"
                 :create-template="false"
-                :reply-post="replyPost"
             />
         </div>
     </div>

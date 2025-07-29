@@ -59,7 +59,7 @@
 <template>
     <div>
         <div class="flex justify-between items-center h-12 mb-4">
-            <h1 class="text-center text-white ml-4 text-2xl">Shrubzy</h1>
+            <h1 class="text-center text-white ml-4 text-2xl"><NuxtLink to="/">Shrubzy</NuxtLink></h1>
             <div class="flex gap-x-2">
                 <BaseButton @click="toggleTemplate">Create Post</BaseButton>
                 <BaseButton variant="secondary" @click="logout" >Log Out</BaseButton>

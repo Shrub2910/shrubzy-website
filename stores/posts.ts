@@ -6,6 +6,11 @@ export const usePostsStore = defineStore('posts', {
     state: (): {posts: Post[], currentPost: Post | undefined} => ({posts: [], currentPost: undefined}),
 
     actions: {
+        clearStore() {
+            this.posts = []
+            this.currentPost = undefined
+        },
+
         async createPost(postBody: {title: string, body: string, parentId: number | null | undefined}) {
             const requestFetch = useRequestFetch()
 

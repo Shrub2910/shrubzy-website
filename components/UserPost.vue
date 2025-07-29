@@ -63,16 +63,14 @@
 <template>
     <div class="flex p-2 mx-2 bg-gray-700 rounded-md">
         <div class="flex flex-col justify-center mr-1 gap-2 w-full min-w-0 m-4">
-            <div class="flex flex-col justify-between">
-                <div class="flex justify-between">
-                    <p v-if="!createTemplate" class="text-gray-400 break-all">Written by {{ user.username }}</p>
-                    <p v-if="post.parentId" class="text-gray-400 break-all">Replying to {{post.parentTitle}}</p>
-                </div>                
-                <NuxtLink v-if="!editingMode && !createTemplate" :to="`/posts/${post.id}`" class="text-4xl text-gray-100 font-bold pb-4 mt-2 break-words">{{ post.title }}</NuxtLink>
+            <div class="flex flex-col justify-between gap-2">
+                <p v-if="post.parentId" class="text-green-400 break-normal"><NuxtLink :to="`/posts/${post.parentId}`">Replying to {{post.parentTitle}}</NuxtLink></p>
+                <p v-if="!createTemplate" class="text-gray-400 break-all">Written by {{ user.username }}</p>
+                <h2 v-if="!editingMode && !createTemplate" class="text-4xl text-gray-100 font-bold pb-4 break-words"><NuxtLink :to="`/posts/${post.id}`">{{ post.title }}</NuxtLink></h2>
                 <p v-if="!editingMode && !createTemplate" class="text-gray-100 p-2 max-h-40 overflow-auto rounded-md break-words whitespace-pre-wrap">{{ post.body }}</p>
                 
 
-                <contenteditable v-if="editingMode || createTemplate" v-model="editedTitle" tag="div" data-placeholder="Title..." class="text-4xl text-blue-400 bg-transparent font-bold pb-4 mt-2 break-words relative empty:before:content-[attr(data-placeholder)] empty:before:text-gray-400 empty:before:absolute empty:before:pointer-events-none" />
+                <contenteditable v-if="editingMode || createTemplate" v-model="editedTitle" tag="div" data-placeholder="Title..." class="text-4xl text-blue-400 bg-transparent font-bold pb-4 break-words relative empty:before:content-[attr(data-placeholder)] empty:before:text-gray-400 empty:before:absolute empty:before:pointer-events-none" />
                 <contenteditable v-if="editingMode || createTemplate" v-model="editedBody" tag="div" data-placeholder="Body..." class="text-blue-400 bg-transparent p-2 max-h-40 overflow-auto rounded-md break-words whitespace-pre-wrap empty:before:content-[attr(data-placeholder)] empty:before:text-gray-400 empty:before:absolute empty:before:pointer-events-none" />
             </div>
 
