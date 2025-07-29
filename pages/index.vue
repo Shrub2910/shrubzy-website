@@ -30,6 +30,7 @@
         reply.title = title
 
         showTemplate.value = true
+        scrollTo(0,0)
     }
 
     const postsStore = usePostsStore()

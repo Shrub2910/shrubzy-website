@@ -29,7 +29,7 @@
         if (!showTemplate.value) {
             reply.id = ''
             reply.title = ''
-        }
+        } 
     }
 
     function replyPost(id: string, title: string) {
@@ -37,6 +37,7 @@
         reply.title = title
 
         showTemplate.value = true
+        scrollTo(0,0)
     }
 
 
