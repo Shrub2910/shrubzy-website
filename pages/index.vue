@@ -1,15 +1,17 @@
 <script setup lang="ts">
     import { usePostsStore } from '~/stores/posts'
+    import type { Post } from '~/types/post'
 
     definePageMeta({
         middleware: ["auth"]
     })
 
     const showTemplate = ref(false)
-    const reply = reactive({
-        id: '',
-        title: ''
-    })
+
+
+    const replyId = ref<number | null>(null)
+    const replyTitle = ref('')
+    
     const {user, clear: clearSession} = useUserSession()
 
     async function logout() {
@@ -20,18 +22,31 @@
     function toggleTemplate() {
         showTemplate.value = !showTemplate.value
         if (!showTemplate.value) {
-            reply.id = ''
-            reply.title = ''
+            replyId.value = null
+            replyTitle.value = ''
         }
     }
 
-    function replyPost(id: string, title: string) {
-        reply.id = id
-        reply.title = title
+    function replyPost(id: number, title: string) {
+        replyId.value = id
+        replyTitle.value = title
 
         showTemplate.value = true
         scrollTo(0,0)
     }
+
+    const templatePost = computed<Post>(() => ({
+        id: 0,
+        title: 'Title',
+        body: 'Body',
+        authorId: user.id,
+        authorUsername: null,
+        parentId: replyId.value,
+        parentTitle: replyTitle.value,
+        likeCount: 0,
+        replyCount: 0,
+        isLiked: false,
+    }))
 
     const postsStore = usePostsStore()
 
@@ -56,29 +71,16 @@
             <div class="flex flex-col gap-4 w-full max-w-7xl">
                 <UserPost 
                     v-if="showTemplate"
-                    :user-owns-post="true"
-                    post-id="0"
-                    title="Title"
-                    body="Body"
-                    username=""
+                    :post="templatePost"
+                    :user="user"
                     :create-template="true"
                     :hide-post="toggleTemplate"
-                    :parent-id="reply.id !== '' ? parseInt(reply.id): undefined"
-                    :parent-title="reply.title !== '' ? reply.title: undefined"
                 />
                 <UserPost 
                     v-for="(post) in posts" 
                     :key="post.id" 
-                    :user-owns-post="user.id === post.authorId" 
-                    :post-id="post.id.toString()" 
-                    :title="post.title" 
-                    :body="post.body" 
-                    :username="post.authorUsername"
-                    :like-count="post.likeCount"
-                    :is-liked="post.isLiked"
-                    :reply-count="post.replyCount"
-                    :parent-id="post.parentId ? post.parentId : undefined"
-                    :parent-title="post.parentTitle ? post.parentTitle : undefined"
+                    :post="post"
+                    :user="user"
                     :create-template="false"
                     :reply-post="replyPost"
                 />

@@ -1,24 +1,15 @@
 <script setup lang="ts">
+    import type { User } from '#auth-utils';
     import contenteditable from 'vue-contenteditable';
+    import type { Post } from '~/types/post';
 
     const props = defineProps<{
-        userOwnsPost: boolean,
-        postId: string,
-        title: string,
-        body: string | null,
-        username: string | null,
-        likeCount?: number,
-        replyCount?: number,
-
-        isLiked?: boolean,
-        parentId?: number,
-        parentTitle?: string,
-
+        post: Post,
+        user: User,
         deleteRedirect?: string,
-
         createTemplate: boolean,
         hidePost?: () => void,
-        replyPost?: (id: string, title: string) => void,
+        replyPost?: (id: number, title: string) => void,
     }>()
 
     const postsStore = usePostsStore()
@@ -28,9 +19,11 @@
     const editedTitle = ref('')
     const editedBody = ref('')
 
+    const userOwnsPost = computed(() => props.post.authorId === props.user.id || props.createTemplate)
+
     async function createPost() {
         try {
-            await postsStore.createPost({title: editedTitle.value, body: editedBody.value, parentId: props.parentId})
+            await postsStore.createPost({title: editedTitle.value, body: editedBody.value, parentId: props.post.parentId})
             editedTitle.value = 'Title'
             editedBody.value = 'Body'
             if (props.hidePost){
@@ -43,16 +36,16 @@
 
     function editPost() {
         editingMode.value = true
-        editedTitle.value = props.title
-        if (props.body) {
-            editedBody.value = props.body
+        editedTitle.value = props.post.title
+        if (props.post.body) {
+            editedBody.value = props.post.body
         } else {
             editedBody.value = ''
         }
     }
 
     async function submitEdit() {
-        await postsStore.editPost(props.postId, {
+        await postsStore.editPost(props.post.id, {
             title: editedTitle.value,
             body: editedBody.value
         })
@@ -60,7 +53,7 @@
     }
 
     async function deletePost() {
-        await postsStore.deletePost(props.postId)
+        await postsStore.deletePost(props.post.id)
         if (props.deleteRedirect) {
             await navigateTo(props.deleteRedirect)
         }
@@ -72,11 +65,11 @@
         <div class="flex flex-col justify-center mr-1 gap-2 w-full min-w-0 m-4">
             <div class="flex flex-col justify-between">
                 <div class="flex justify-between">
-                    <p v-if="!createTemplate" class="text-gray-400 break-all">Written by {{ username }}</p>
-                    <p v-if="parentId" class="text-gray-400 break-all">Replying to {{parentTitle}}</p>
+                    <p v-if="!createTemplate" class="text-gray-400 break-all">Written by {{ user.username }}</p>
+                    <p v-if="post.parentId" class="text-gray-400 break-all">Replying to {{post.parentTitle}}</p>
                 </div>                
-                <NuxtLink v-if="!editingMode && !createTemplate" :to="`/posts/${postId}`" class="text-4xl text-gray-100 font-bold pb-4 mt-2 break-words">{{ title }}</NuxtLink>
-                <p v-if="!editingMode && !createTemplate" class="text-gray-100 p-2 max-h-40 overflow-auto rounded-md break-words whitespace-pre-wrap">{{ body }}</p>
+                <NuxtLink v-if="!editingMode && !createTemplate" :to="`/posts/${post.id}`" class="text-4xl text-gray-100 font-bold pb-4 mt-2 break-words">{{ post.title }}</NuxtLink>
+                <p v-if="!editingMode && !createTemplate" class="text-gray-100 p-2 max-h-40 overflow-auto rounded-md break-words whitespace-pre-wrap">{{ post.body }}</p>
                 
 
                 <contenteditable v-if="editingMode || createTemplate" v-model="editedTitle" tag="div" data-placeholder="Title..." class="text-4xl text-blue-400 bg-transparent font-bold pb-4 mt-2 break-words relative empty:before:content-[attr(data-placeholder)] empty:before:text-gray-400 empty:before:absolute empty:before:pointer-events-none" />
@@ -85,8 +78,8 @@
 
             <div class="flex justify-between">
                 <div v-if="!editingMode && !createTemplate" class="flex justify-start gap-2">
-                    <BaseButton v-if="replyPost" variant="secondary" @click="replyPost(postId, title)">Reply: {{ replyCount }}</BaseButton>
-                    <BaseButton :class="!isLiked && 'bg-transparent'" @click="postsStore.likePost(postId)">Like: {{ likeCount }}</BaseButton>
+                    <BaseButton v-if="replyPost" variant="secondary" @click="replyPost(post.id, post.title)">Reply: {{ post.replyCount }}</BaseButton>
+                    <BaseButton :class="!post.isLiked && 'bg-transparent'" @click="postsStore.likePost(post.id)">Like: {{ post.likeCount }}</BaseButton>
                 </div>
                 <div v-if="userOwnsPost" class="flex justify-end gap-2">
                     <BaseButton v-if="!editingMode && !createTemplate" variant="warning" @click="editPost">Edit</BaseButton>
@@ -99,7 +92,6 @@
                     <BaseButton v-if="createTemplate" @click="createPost">Create Post</BaseButton>
                 </div>
             </div>
-
         </div>
 
     </div>

@@ -6,8 +6,12 @@ export const usePostsStore = defineStore('posts', {
     state: (): {posts: Post[], currentPost: Post | undefined} => ({posts: [], currentPost: undefined}),
 
     actions: {
-        async createPost(postBody: {title: string, body: string, parentId?: number}) {
+        async createPost(postBody: {title: string, body: string, parentId: number | null | undefined}) {
             const requestFetch = useRequestFetch()
+
+            if (!postBody.parentId) {
+                postBody.parentId = undefined
+            }
 
             const newPost: Post = await requestFetch<Post>('/api/posts', {
                 method: 'POST',
@@ -64,7 +68,7 @@ export const usePostsStore = defineStore('posts', {
             this.posts = [...this.posts, ...newPosts]
         },
 
-        async editPost(id: string, postBody: {title: string, body: string}) {
+        async editPost(id: number, postBody: {title: string, body: string}) {
             const requestFetch = useRequestFetch()
 
             const editedPost: Post = await requestFetch<Post>(`/api/posts/${id}`, {
@@ -75,14 +79,14 @@ export const usePostsStore = defineStore('posts', {
             const allPosts = [...this.posts, this.currentPost]
 
             allPosts.forEach(post => {
-                if (post && post.id === parseInt(id)){
+                if (post && post.id === id){
                     post.title = editedPost.title
                     post.body = editedPost.body
                 }
             })
         },
 
-        async deletePost(id: string) {
+        async deletePost(id: number) {
             const requestFetch = useRequestFetch()
 
             await requestFetch<Post>(`/api/posts/${id}`, {
@@ -90,7 +94,7 @@ export const usePostsStore = defineStore('posts', {
             })
 
             
-            const post = this.posts.find(post => post?.id === parseInt(id))
+            const post = this.posts.find(post => post?.id === id)
 
             const parentId = post?.parentId;
 
@@ -100,15 +104,14 @@ export const usePostsStore = defineStore('posts', {
                 }
             })
 
-            this.posts = this.posts.filter(post => post.id !== parseInt(id))
-            this.posts = this.posts.filter(post => post.parentId !== parseInt(id))
+            this.posts = this.posts.filter(post => post.id !== id)
+            this.posts = this.posts.filter(post => post.parentId !== id)
         },
 
-        async likePost(id: string) {
-            const idNumber = parseInt(id)
+        async likePost(id: number) {
             const allPosts = [...this.posts, this.currentPost]
 
-            const posts = allPosts.filter(post => post?.id === idNumber)
+            const posts = allPosts.filter(post => post?.id === id)
             
             if (!posts) {
                 return
@@ -123,7 +126,7 @@ export const usePostsStore = defineStore('posts', {
 
             await $fetch('/api/likes', {
                 method: 'PUT',
-                body: {postId: idNumber}
+                body: {postId: id}
             })
 
 
