@@ -1,7 +1,7 @@
 import {z} from 'zod'
 import { useDrizzle } from "~/server/utils/drizzle"
 import { likesTable, postsTable, usersTable } from '~/server/database/schema'
-import { count, desc, eq, lt, sql } from 'drizzle-orm'
+import { countDistinct, desc, eq, lt, sql } from 'drizzle-orm'
 import { alias } from 'drizzle-orm/pg-core'
 
 const querySchema = z.object({
@@ -25,8 +25,8 @@ export default defineEventHandler(async (event) => {
         authorUsername: usersTable.username,
         parentId: parent.id,
         parentTitle: parent.title,
-        replyCount: count(replies.id).as('replyCount'),
-        likeCount: count(likesTable.postId).as('likeCount'),
+        replyCount: countDistinct(replies.id).as('replyCount'),
+        likeCount: countDistinct(likesTable.postId).as('likeCount'),
         isLiked: sql<boolean>`bool_or(${likesTable.userId} = ${user.id})`.as('isLiked')
     })
     .from(postsTable)
