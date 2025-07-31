@@ -40,11 +40,11 @@ export const usePostsStore = defineStore('posts', {
             this.posts = [newPost, ...this.posts]
         },
 
-        async fetchPosts(parentId?: string){
+        async fetchPosts(parentId?: string, userId?: string){
             const requestFetch = useRequestFetch()
 
             this.posts = await requestFetch<Post[]>('/api/posts', {
-                    query: {limit: 20, parentId},
+                    query: {limit: 20, parentId, userId},
                 }
             )
         },
@@ -126,6 +126,13 @@ export const usePostsStore = defineStore('posts', {
                 if (post) {
                     post.isLiked = !post.isLiked
                     post.likeCount += post.isLiked ? 1 : -1
+
+                    const userStore = useUsersStore()
+                    const user = userStore.user
+
+                    if (user && user.id === post.authorId) {
+                        user.likeCount += post.isLiked ? 1 : -1
+                    }
                 }
             })
 

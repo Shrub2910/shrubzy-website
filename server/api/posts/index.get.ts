@@ -7,11 +7,12 @@ const querySchema = z.object({
     limit: z.coerce.number().int().min(1).max(100).optional().default(10),
     afterId: z.coerce.number().int().positive().optional(),
     parentId: z.coerce.number().int().positive().optional(),
+    userId: z.coerce.number().int().positive().optional(),
 })
 
 export default defineEventHandler(async (event) => {
     const {user} = await requireUserSession(event)
-    const {limit, afterId, parentId} = await getValidatedQuery(event, querySchema.parse)
+    const {limit, afterId, parentId, userId} = await getValidatedQuery(event, querySchema.parse)
 
     const query = getPosts(user)
     .orderBy(desc(postsTable.id))
@@ -23,6 +24,10 @@ export default defineEventHandler(async (event) => {
 
     if (parentId) {
         query.where(eq(postsTable.parentId, parentId))
+    }
+
+    if (userId){
+        query.where(eq(postsTable.authorId, userId))
     }
     
     const posts = await query

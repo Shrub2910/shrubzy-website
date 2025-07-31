@@ -9,23 +9,22 @@
     const route = useRoute()
     const id = route.params.id as string
 
+    const idNumber = computed(() => parseInt(id))
+
     const {user, clear: clearSession} = useUserSession()
 
     const postsStore = usePostsStore()
 
-    await callOnce(`post/${id}`, () => {
-        postsStore.clearStore()
-        postsStore.fetchPost(id)
-    }, {mode: 'navigation'})
-    await callOnce(`post/parent/${id}`, () => postsStore.fetchPosts(id), {mode: 'navigation'})
+    await callOnce(() => postsStore.fetchPost(id), {mode: 'navigation'})
+    await callOnce(() => postsStore.fetchPosts(id), {mode: 'navigation'})
 
     const post = computed(() => postsStore.currentPost)
     const posts = computed(() => postsStore.posts)
 
     const showTemplate = ref(false)
 
-    const replyId = ref<number | null>(null)
-    const replyTitle = ref('')
+    const replyId = ref<number | null>(idNumber.value)
+    const replyTitle = ref(post.value?.title)
 
     async function logout() {
         await clearSession()
@@ -35,9 +34,9 @@
     function toggleTemplate() {
         showTemplate.value = !showTemplate.value
         if (!showTemplate.value) {
-            replyId.value = null
-            replyTitle.value = ''
-        }
+            replyId.value = idNumber.value
+            replyTitle.value = post.value?.title
+        } 
     }
 
     function replyPost(id: number, title: string) {
@@ -55,7 +54,7 @@
         authorId: user.id,
         authorUsername: null,
         parentId: replyId.value,
-        parentTitle: replyTitle.value,
+        parentTitle: replyTitle.value ? replyTitle.value : null,
         likeCount: 0,
         replyCount: 0,
         isLiked: false,

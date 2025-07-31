@@ -50,7 +50,7 @@
 
     const postsStore = usePostsStore()
 
-    await callOnce('posts', () => postsStore.fetchPosts(), {mode: 'navigation'})
+    await callOnce(() => postsStore.fetchPosts(), {mode: 'navigation'})
 
     const posts = computed(() => postsStore.posts)
 

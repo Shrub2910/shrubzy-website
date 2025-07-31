@@ -56,18 +56,6 @@ export const getPosts = (user: User) => {
     .leftJoin(postReplies, eq(postsTable.id, postReplies.postId))
     .leftJoin(postLikes, eq(postsTable.id, postLikes.postId))
     .leftJoin(postIsLiked, eq(postsTable.id, postIsLiked.postId))
-    .groupBy(
-        postsTable.id,
-        postsTable.title,
-        postsTable.body,
-        postsTable.authorId,
-        usersTable.username,
-        parent.id,
-        parent.title,
-        postReplies.replyCount,
-        postLikes.likeCount,
-        postIsLiked.isLiked
-    )
 
     return query
 }

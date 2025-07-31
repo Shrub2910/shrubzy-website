@@ -65,7 +65,7 @@
         <div class="flex flex-col justify-center mr-1 gap-2 w-full min-w-0 m-4">
             <div class="flex flex-col justify-between gap-2">
                 <p v-if="post.parentId" class="text-green-400 break-normal"><NuxtLink :to="`/posts/${post.parentId}`">Replying to {{post.parentTitle}}</NuxtLink></p>
-                <p v-if="!createTemplate" class="text-gray-400 break-all">Written by {{ post.authorUsername }}</p>
+                <p v-if="!createTemplate" class="text-gray-400 break-all"><NuxtLink :to="`/users/${post.authorId}`">Written by {{ post.authorUsername }}</NuxtLink></p>
                 <h2 v-if="!editingMode && !createTemplate" class="text-4xl text-gray-100 font-bold pb-4 break-words"><NuxtLink :to="`/posts/${post.id}`">{{ post.title }}</NuxtLink></h2>
                 <p v-if="!editingMode && !createTemplate" class="text-gray-100 p-2 max-h-40 overflow-auto rounded-md break-words whitespace-pre-wrap">{{ post.body }}</p>
                 
