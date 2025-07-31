@@ -1,11 +1,10 @@
 <script setup lang="ts">
     import { useUsersStore } from '~/stores/users';
+    import contenteditable from 'vue-contenteditable';
 
     definePageMeta({
         middleware: ['auth']
     })
-
-    const {user} = useUserSession()
 
     const route = useRoute()
     const id = route.params.id as string
@@ -19,13 +18,34 @@
     const userInfo = computed(() => usersStore.user)
     const posts = computed(() => postsStore.posts)
 
+    const {user} = useUserSession()
+
+    const editingUsername = ref(false)
+    const newUsername = ref<string>(user.value.username)
+
+    function editUsername() {
+        editingUsername.value = true
+        newUsername.value = user.value.username
+    }
+
+    function saveUsername() {
+        editingUsername.value = false
+        usersStore.changeUsername(newUsername.value, user.value.id)
+    }
+
 
 </script>
 
 <template>
     <div v-if="userInfo">
         <NuxtLink to="/" class="m-2"><BaseButton variant="secondary">Back</BaseButton></NuxtLink>
-        <h1 class="text-gray-100 text-4xl text-center my-4 font-semibold">{{ userInfo.username }}</h1>
+        <contenteditable v-if="editingUsername" v-model="newUsername" tag="h1" class="text-gray-100 text-4xl text-center my-4 font-semibold" />
+        <h1 v-if="!editingUsername" class="text-gray-100 text-4xl text-center my-4 font-semibold">{{ userInfo.username }}</h1>
+        <div v-if="userInfo.id === user.id" class="flex justify-center gap-2 mb-2">
+            <BaseButton v-if="!editingUsername" variant="warning" @click="editUsername">Edit Username</BaseButton>
+            <BaseButton v-if="editingUsername" variant="secondary" @click="editingUsername=false">Back</BaseButton>
+            <BaseButton v-if="editingUsername" @click="saveUsername">Save</BaseButton>
+        </div>
         <div class="flex justify-center gap-2">
             <p class="text-gray-100 p-2 bg-blue-400 rounded-xl text-xl">Posts: {{ userInfo.postsCount }}</p>
             <p class="text-gray-100 p-2 bg-blue-400 rounded-xl text-xl">Likes: {{ userInfo.likeCount }}</p>

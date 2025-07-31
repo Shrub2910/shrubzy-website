@@ -18,6 +18,15 @@ export default defineEventHandler(async (event) => {
 
     const db = useDrizzle()
 
+    const [userExists] = await db.select().from(usersTable).where(eq(usersTable.id, user.id)).limit(1)
+
+    if (!userExists) {
+        throw createError({
+            statusCode: 403,
+            statusMessage: "User you are tyring to edit doesn't exist"
+        })
+    }
+
     try{
 
         await db.update(usersTable).set({

@@ -67,6 +67,9 @@
         </div>
 
         <p v-if="user" class="mb-4 text-center font-semibold text-white text-2xl">Welcome {{ user.username }}</p>
+        <div class="flex justify-center mb-2">
+            <NuxtLink :to="`/users/${user.id}`"><BaseButton>User Profile</BaseButton></NuxtLink>
+        </div>
         <div class="flex justify-center">
             <div class="flex flex-col gap-4 w-full max-w-7xl">
                 <UserPost 

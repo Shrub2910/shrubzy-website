@@ -32,7 +32,6 @@ export default defineEventHandler(async (event) => {
     }
 
     user.likeCount = Number(user.likeCount)
-    console.log(typeof(user.likeCount))
 
     return user
 })
