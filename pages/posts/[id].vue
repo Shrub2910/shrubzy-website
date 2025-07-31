@@ -9,21 +9,21 @@
     const route = useRoute()
     const id = route.params.id as string
 
-    const idNumber = computed(() => parseInt(id))
+    const idNumber = parseInt(id)
 
     const {user, clear: clearSession} = useUserSession()
 
     const postsStore = usePostsStore()
 
-    await callOnce(() => postsStore.fetchPost(id), {mode: 'navigation'})
-    await callOnce(() => postsStore.fetchPosts(id), {mode: 'navigation'})
+    await callOnce(`fetchPost-${id}`, () => postsStore.fetchPost(id), {mode: 'navigation'})
+    await callOnce(`fetchPosts-${id}`,() => postsStore.fetchPosts(id), {mode: 'navigation'})
 
     const post = computed(() => postsStore.currentPost)
     const posts = computed(() => postsStore.posts)
 
     const showTemplate = ref(false)
 
-    const replyId = ref<number | null>(idNumber.value)
+    const replyId = ref<number | null>(idNumber)
     const replyTitle = ref(post.value?.title)
 
     async function logout() {
@@ -34,7 +34,7 @@
     function toggleTemplate() {
         showTemplate.value = !showTemplate.value
         if (!showTemplate.value) {
-            replyId.value = idNumber.value
+            replyId.value = idNumber
             replyTitle.value = post.value?.title
         } 
     }
