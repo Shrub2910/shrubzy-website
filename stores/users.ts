@@ -24,6 +24,12 @@ export const useUsersStore = defineStore('users', {
                     if (this.user && this.user.id === userId) {
                         this.user.username = username
                     }
+                    const postsStore = usePostsStore()
+                    postsStore.posts.forEach(post => {
+                        if (post.authorId === userId) {
+                            post.authorUsername = username
+                        }
+                    })
                 }
             )
 

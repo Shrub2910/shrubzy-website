@@ -22,8 +22,6 @@ export default defineEventHandler(async (event) => {
 
     const [user] = await query
 
-    console.log(user.postsCount)
-
     if (!user) {
         throw createError({
             statusCode: 404,
