@@ -9,8 +9,10 @@
     })
 
     const showErrorMessage = ref(false)
+    const isLoading = ref(false)
 
     async function login() {
+        isLoading.value = true
         $fetch('/api/login', {
             method: 'POST',
             body: credentials,
@@ -22,6 +24,9 @@
         .catch((err) => {
             console.log('There was an error: ', err)
             showErrorMessage.value = true
+        })
+        .finally(() => {
+            isLoading.value = false
         })
     }
 
@@ -43,6 +48,7 @@
                 <BaseButton type="button" variant="secondary" @click="signup">Sign up</BaseButton>
                 <BaseButton type="submit" variant="primary">Submit</BaseButton>
             </div>
+            <h1 v-if="isLoading" class="text-center text-gray-100">LOADING ...</h1>
 
         </form>
     </div>

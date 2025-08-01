@@ -12,8 +12,8 @@
     const usersStore = useUsersStore()
     const postsStore = usePostsStore()
 
-    await callOnce(() => usersStore.fetchUser(id), {mode: 'navigation'})
-    await callOnce(() => postsStore.fetchPosts(undefined, id), {mode: 'navigation'})
+    await callOnce(`fetchUser-${id}`, () => usersStore.fetchUser(id), {mode: 'navigation'})
+    await callOnce(`fetchPosts-${id}`, () => postsStore.fetchPosts(undefined, id), {mode: 'navigation'})
 
     const userInfo = computed(() => usersStore.user)
     const posts = computed(() => postsStore.posts)
@@ -59,6 +59,7 @@
                 :user="user"
                 :create-template="false"
             />
+            <h1 v-if="postsStore.loadingCount !== 0" class="text-gray-100 text-center text-2xl">LOADING ...</h1>
         </div>
         </div>
     </div>

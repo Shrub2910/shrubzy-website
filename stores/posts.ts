@@ -3,12 +3,24 @@ import type { Post } from "~/types/post"
 import { useRequestFetch } from "#app"
 
 export const usePostsStore = defineStore('posts', {
-    state: (): {posts: Post[], currentPost: Post | undefined} => ({posts: [], currentPost: undefined}),
+    state: (): {posts: Post[], currentPost: Post | undefined, loadingCount: number} => ({
+        posts: [],
+        currentPost: undefined,
+        loadingCount: 0
+    }),
 
     actions: {
         clearStore() {
             this.posts = []
             this.currentPost = undefined
+        },
+
+        beginLoading() {
+            this.loadingCount++
+        },
+
+        finishLoading(){
+            this.loadingCount--
         },
 
         async createPost(postBody: {title: string, body: string, parentId: number | null | undefined}) {
@@ -42,17 +54,23 @@ export const usePostsStore = defineStore('posts', {
 
         async fetchPosts(parentId?: string, userId?: string){
             const requestFetch = useRequestFetch()
-
+            this.posts = []
+            this.beginLoading()
             this.posts = await requestFetch<Post[]>('/api/posts', {
                     query: {limit: 20, parentId, userId},
                 }
             )
+            .finally(() => {
+                this.finishLoading()
+            })
         },
 
         async fetchPost(id: string){
             const requestFetch = useRequestFetch()
-
+            this.currentPost = undefined
+            this.beginLoading()
             this.currentPost = await requestFetch<Post>(`/api/posts/${id}`)
+            this.finishLoading()
         },
 
         async fetchMorePosts(parentId?: string) {
@@ -62,6 +80,7 @@ export const usePostsStore = defineStore('posts', {
                 return
             }
 
+            this.beginLoading()
             const newPosts: Post[] = await requestFetch<Post[]>('/api/posts', {
                 query: {
                     limit: 20,
@@ -69,6 +88,7 @@ export const usePostsStore = defineStore('posts', {
                     afterId: this.posts[this.posts.length - 1].id
                 }
             })
+            this.finishLoading()
 
             this.posts = [...this.posts, ...newPosts]
         },

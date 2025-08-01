@@ -89,13 +89,16 @@
                 :create-template="true"
                 :hide-post="toggleTemplate"
             />
-            <UserPost 
-                v-for="(postReply) in posts" 
-                :key="postReply.id" 
-                :post="postReply"
-                :user="user"
-                :create-template="false"
-            />
+            <div v-if="postsStore.loadingCount === 0">
+                <UserPost 
+                    v-for="(postReply) in posts" 
+                    :key="postReply.id" 
+                    :post="postReply"
+                    :user="user"
+                    :create-template="false"
+                />
+            </div>
+            <h1 v-if="postsStore.loadingCount !== 0" class="text-gray-100 text-center text-2xl">LOADING ...</h1>
         </div>
     </div>
     </main>

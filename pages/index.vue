@@ -50,7 +50,7 @@
 
     const postsStore = usePostsStore()
 
-    await callOnce(() => postsStore.fetchPosts(), {mode: 'navigation'})
+    await callOnce('fetchPosts', () => postsStore.fetchPosts(), {mode: 'navigation'})
 
     const posts = computed(() => postsStore.posts)
 
@@ -87,7 +87,8 @@
                     :create-template="false"
                     :reply-post="replyPost"
                 />
-                <BaseButton class="mx-2 mb-2 text-2xl" @click="postsStore.fetchMorePosts()">Show More</BaseButton>
+                <h1 v-if="postsStore.loadingCount !== 0" class="text-gray-100 text-center text-2xl">LOADING ...</h1>
+                <BaseButton v-if="postsStore.loadingCount === 0" class="mx-2 mb-2 text-2xl" @click="postsStore.fetchMorePosts()">Show More</BaseButton>
             </div>
         </div>
     </div>
