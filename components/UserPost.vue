@@ -5,7 +5,7 @@
 
     const props = defineProps<{
         post: Post,
-        user: User,
+        user?: User,
         deleteRedirect?: string,
         createTemplate: boolean,
         hidePost?: () => void,
@@ -19,7 +19,7 @@
     const editedTitle = ref('')
     const editedBody = ref('')
 
-    const userOwnsPost = computed(() => props.post.authorId === props.user.id || props.createTemplate)
+    const userOwnsPost = computed(() => props.post.authorId === props.user?.id || props.createTemplate)
 
     async function createPost() {
         try {
@@ -76,8 +76,8 @@
 
             <div class="flex justify-between">
                 <div v-if="!editingMode && !createTemplate" class="flex justify-start gap-2">
-                    <BaseButton v-if="replyPost" variant="secondary" @click="replyPost(post.id, post.title)">Reply: {{ post.replyCount }}</BaseButton>
-                    <BaseButton :class="!post.isLiked && 'bg-transparent'" @click="postsStore.likePost(post.id)">Like: {{ post.likeCount }}</BaseButton>
+                    <BaseButton v-if="replyPost" variant="secondary" @click="user ? replyPost(post.id, post.title) : navigateTo('/login')">Reply: {{ post.replyCount }}</BaseButton>
+                    <BaseButton :class="!post.isLiked && 'bg-transparent'" @click="user ? postsStore.likePost(post.id) : navigateTo('/login')">Like: {{ post.likeCount }}</BaseButton>
                 </div>
                 <div v-if="userOwnsPost" class="flex justify-end gap-2">
                     <BaseButton v-if="!editingMode && !createTemplate" variant="warning" @click="editPost">Edit</BaseButton>

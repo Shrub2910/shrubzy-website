@@ -28,7 +28,7 @@
 
     async function logout() {
         await clearSession()
-        await navigateTo('/login')
+        await navigateTo('/')
     }
 
     function toggleTemplate() {

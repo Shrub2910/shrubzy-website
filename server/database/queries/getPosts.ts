@@ -4,7 +4,7 @@ import {count, eq, sql } from 'drizzle-orm'
 import { alias } from 'drizzle-orm/pg-core'
 import type { User } from "#auth-utils"
 
-export const getPosts = (user: User) => {
+export const getPosts = (user?: User) => {
     const db = useDrizzle()
 
     const parent = alias(postsTable, 'parent')
@@ -30,7 +30,7 @@ export const getPosts = (user: User) => {
 
     const postIsLiked = db.select({
         postId: postsTable.id,
-        isLiked: sql<boolean>`bool_or(${likesTable.userId} = ${user.id})`.as('isLiked')
+        isLiked: sql<boolean>`bool_or(${likesTable.userId} = ${user ? user.id : 0})`.as('isLiked')
     })
     .from(postsTable)
     .leftJoin(likesTable, eq(postsTable.id, likesTable.postId))

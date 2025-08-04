@@ -11,7 +11,7 @@ const querySchema = z.object({
 })
 
 export default defineEventHandler(async (event) => {
-    const {user} = await requireUserSession(event)
+    const {user} = await getUserSession(event)
     const {limit, afterId, parentId, userId} = await getValidatedQuery(event, querySchema.parse)
 
     const query = getPosts(user)

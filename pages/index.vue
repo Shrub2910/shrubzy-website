@@ -2,10 +2,6 @@
     import { usePostsStore } from '~/stores/posts'
     import type { Post } from '~/types/post'
 
-    definePageMeta({
-        middleware: ["auth"]
-    })
-
     const showTemplate = ref(false)
 
 
@@ -16,7 +12,6 @@
 
     async function logout() {
         await clearSession()
-        await navigateTo('/login')
     }
 
     function toggleTemplate() {
@@ -61,13 +56,14 @@
         <div class="flex justify-between items-center h-12 mb-4">
             <h1 class="text-center text-white ml-4 text-2xl"><NuxtLink to="/">Shrubzy</NuxtLink></h1>
             <div class="flex gap-x-2">
-                <BaseButton @click="toggleTemplate">Create Post</BaseButton>
-                <BaseButton variant="secondary" @click="logout" >Log Out</BaseButton>
+                <BaseButton v-if="user" @click="toggleTemplate">Create Post</BaseButton>
+                <BaseButton v-if="user" variant="secondary" @click="logout" >Log Out</BaseButton>
+                <NuxtLink v-if="!user" to="/login"><BaseButton>Sign in</BaseButton></NuxtLink>
             </div>
         </div>
 
         <p v-if="user" class="mb-4 text-center font-semibold text-white text-2xl">Welcome {{ user.username }}</p>
-        <div class="flex justify-center mb-2">
+        <div v-if="user" class="flex justify-center mb-2">
             <NuxtLink :to="`/users/${user.id}`"><BaseButton>User Profile</BaseButton></NuxtLink>
         </div>
         <div class="flex justify-center">
